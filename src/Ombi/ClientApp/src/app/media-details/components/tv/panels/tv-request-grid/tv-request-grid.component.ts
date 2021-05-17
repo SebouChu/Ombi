@@ -60,23 +60,18 @@ export class TvRequestGridComponent {
             viewModel.seasons.push(seasonsViewModel);
         });
 
-        if (this.isAdmin) {
-            const dialog = this.dialog.open(AdminRequestDialogComponent, { width: "700px", data: { type: RequestType.tvShow, id: this.tv.id }, panelClass: 'modal-panel' });
-            dialog.afterClosed().subscribe(async (result) => {
-                if (result) {
-                    viewModel.requestOnBehalf = result.username?.id;
-                    viewModel.qualityPathOverride = result?.sonarrPathId;
-                    viewModel.rootFolderOverride = result?.sonarrFolderId;
-                    viewModel.languageProfile = result?.sonarrLanguageId;
+        const dialog = this.dialog.open(AdminRequestDialogComponent, { width: "700px", data: { type: RequestType.tvShow, id: this.tv.id }, panelClass: 'modal-panel' });
+        dialog.afterClosed().subscribe(async (result) => {
+            if (result) {
+                viewModel.requestOnBehalf = result.username?.id;
+                viewModel.qualityPathOverride = result?.sonarrPathId;
+                viewModel.rootFolderOverride = result?.sonarrFolderId;
+                viewModel.languageProfile = result?.sonarrLanguageId;
 
-                    const requestResult = await this.requestServiceV2.requestTv(viewModel).toPromise();
-                    this.postRequest(requestResult);
-                }
-            });
-        } else {
-            const requestResult = await this.requestServiceV2.requestTv(viewModel).toPromise();
-            this.postRequest(requestResult);
-        }
+                const requestResult = await this.requestServiceV2.requestTv(viewModel).toPromise();
+                this.postRequest(requestResult);
+            }
+        });
     }
 
     public async approve(request: IChildRequests) {

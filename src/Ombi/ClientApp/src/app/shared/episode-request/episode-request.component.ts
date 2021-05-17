@@ -59,23 +59,18 @@ export class EpisodeRequestComponent {
             viewModel.seasons.push(seasonsViewModel);
         });
 
-        if (this.data.isAdmin) {
-            const dialog = this.dialog.open(AdminRequestDialogComponent, { width: "700px", data: { type: RequestType.tvShow, id: this.data.series.id }, panelClass: 'modal-panel' });
-            dialog.afterClosed().subscribe(async (result) => {
-                if (result) {
-                    viewModel.requestOnBehalf = result.username?.id;
-                    viewModel.qualityPathOverride = result?.sonarrPathId;
-                    viewModel.rootFolderOverride = result?.sonarrFolderId;
-                    viewModel.languageProfile = result?.sonarrLanguageId;
+        const dialog = this.dialog.open(AdminRequestDialogComponent, { width: "700px", data: { type: RequestType.tvShow, id: this.data.series.id }, panelClass: 'modal-panel' });
+        dialog.afterClosed().subscribe(async (result) => {
+            if (result) {
+                viewModel.requestOnBehalf = result.username?.id;
+                viewModel.qualityPathOverride = result?.sonarrPathId;
+                viewModel.rootFolderOverride = result?.sonarrFolderId;
+                viewModel.languageProfile = result?.sonarrLanguageId;
 
-                    const requestResult = await this.requestService.requestTv(viewModel).toPromise();
-                    this.postRequest(requestResult);
-                }
-            });
-        } else {
-            const requestResult = await this.requestService.requestTv(viewModel).toPromise();
-            this.postRequest(requestResult);
-        }
+                const requestResult = await this.requestService.requestTv(viewModel).toPromise();
+                this.postRequest(requestResult);
+            }
+        });
 
         this.dialogRef.close();
     }

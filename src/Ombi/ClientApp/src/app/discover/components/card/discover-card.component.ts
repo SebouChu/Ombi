@@ -118,36 +118,23 @@ export class DiscoverCardComponent implements OnInit {
                 dia.afterClosed().subscribe(x => this.loading = false);
                 return;
             case RequestType.movie:
-                if (this.isAdmin) {
-                    const dialog = this.dialog.open(AdminRequestDialogComponent, { width: "700px", data: { type: RequestType.movie, id: this.result.id }, panelClass: 'modal-panel' });
-                    dialog.afterClosed().subscribe((result) => {
-                        if (result) {
-                                this.requestService.requestMovie({ theMovieDbId: +this.result.id,
-                                    languageCode: null,
-                                    qualityPathOverride: result.radarrPathId,
-                                    requestOnBehalf: result.username?.id,
-                                    rootFolderOverride: result.radarrFolderId, }).subscribe(x => {
-                                if (x.result) {
-                                    this.result.requested = true;
-                                    this.messageService.send(x.message, "Ok");
-                                } else {
-                                    this.messageService.send(x.errorMessage, "Ok");
-                                }
-                            });
-                        }
-                    });
-                } else {
-                this.requestService.requestMovie({ theMovieDbId: +this.result.id, languageCode: null, requestOnBehalf: null, qualityPathOverride: null, rootFolderOverride: null }).subscribe(x => {
-                    if (x.result) {
-                        this.result.requested = true;
-                        this.messageService.send(x.message, "Ok");
-                    } else {
-                        this.messageService.send(x.errorMessage, "Ok");
+                const dialog = this.dialog.open(AdminRequestDialogComponent, { width: "700px", data: { type: RequestType.movie, id: this.result.id }, panelClass: 'modal-panel' });
+                dialog.afterClosed().subscribe((result) => {
+                    if (result) {
+                            this.requestService.requestMovie({ theMovieDbId: +this.result.id,
+                                languageCode: null,
+                                qualityPathOverride: result.radarrPathId,
+                                requestOnBehalf: result.username?.id,
+                                rootFolderOverride: result.radarrFolderId, }).subscribe(x => {
+                            if (x.result) {
+                                this.result.requested = true;
+                                this.messageService.send(x.message, "Ok");
+                            } else {
+                                this.messageService.send(x.errorMessage, "Ok");
+                            }
+                        });
                     }
-                    this.loading = false;
                 });
-                return;
-            }
         }
     }
 

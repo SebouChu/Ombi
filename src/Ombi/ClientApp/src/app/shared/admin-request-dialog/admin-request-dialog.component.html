@@ -14,20 +14,22 @@
   </div>
 
 <!-- User area -->
-<h3><i class="fas fa-user-friends"></i> {{'MediaDetails.RequestOnBehalf' | translate }}</h3>
-<mat-form-field class="example-full-width" appearance="outline" floatLabel=auto>
-  <mat-label>{{ 'MediaDetails.PleaseSelectUser' | translate}}</mat-label>
-  <input id="requestOnBehalfUserInput"
-         type="text"
-         matInput
-         formControlName="username"
-         [matAutocomplete]="auto">
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-      {{displayFn(option)}}
-    </mat-option>
-  </mat-autocomplete>
-</mat-form-field>
+<div *ngIf="data.isAdmin">
+  <h3><i class="fas fa-user-friends"></i> {{'MediaDetails.RequestOnBehalf' | translate }}</h3>
+  <mat-form-field class="example-full-width" appearance="outline" floatLabel=auto>
+    <mat-label>{{ 'MediaDetails.PleaseSelectUser' | translate}}</mat-label>
+    <input id="requestOnBehalfUserInput"
+    type="text"
+    matInput
+    formControlName="username"
+    [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+        {{displayFn(option)}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
 <!-- End User area -->
 
 
